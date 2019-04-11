@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.Controller">
+    <children>
+      <Button fx:id="btn_Go" layoutX="766.0" layoutY="14.0" mnemonicParsing="false" text="Go" />
+      <TextField fx:id="txt_C1" layoutX="65.0" layoutY="14.0" prefHeight="25.0" prefWidth="40.0" text="740" />
+     <TextField fx:id="txt_C2" layoutX="161.0" layoutY="14.0" prefHeight="25.0" prefWidth="40.0" text="1980" />
+        <TextField fx:id="txt_C3" layoutX="268.0" layoutY="14.0" prefHeight="25.0" prefWidth="40.0" text="100" />
+        <TextField fx:id="txt_n1" layoutX="365.0" layoutY="14.0" prefHeight="25.0" prefWidth="40.0" text="3" />
+      <TextField fx:id="txt_n2" layoutX="477.0" layoutY="14.0" prefHeight="25.0" prefWidth="40.0" text="3" />
+      <TextField fx:id="txt_alpha" layoutX="580.0" layoutY="14.0" prefHeight="25.0" prefWidth="40.0" text="1" />
+      <Label layoutX="42.0" layoutY="18.0" text="C1" />
+      <Label layoutX="139.0" layoutY="18.0" text="C2" />
+      <Label layoutX="247.0" layoutY="18.0" text="C3" />
+      <Label layoutX="342.0" layoutY="18.0" text="n1" />
+      <Label layoutX="444.0" layoutY="18.0" prefHeight="17.0" prefWidth="23.0" text="n1" />
+      <Label layoutX="545.0" layoutY="18.0" text="alpha" />
+      <ScrollPane fx:id="scrollPane" layoutX="18.0" layoutY="85.0" prefHeight="369.0" prefWidth="810.0">
+         <content>
+             <TableView fx:id="table" prefHeight="383.0" prefWidth="781.0">
+                 <columns>
+                     <TableColumn prefWidth="75.0" text="C1" />
+                     <TableColumn prefWidth="75.0" text="C2" />
+                 </columns>
+             </TableView>
+         </content>
+      </ScrollPane>
+      <Label layoutX="42.0" layoutY="473.0" text="C1" />
+      <Label layoutX="42.0" layoutY="511.0" text="C1" />
+      <Label layoutX="42.0" layoutY="546.0" text="C1" />
+      <Label layoutX="328.0" layoutY="468.0" text="C2" />
+      <Label layoutX="328.0" layoutY="506.0" text="C2" />
+      <Label layoutX="328.0" layoutY="541.0" text="C2" />
+      <Label layoutX="613.0" layoutY="543.0" text="C2" />
+      <Label layoutX="613.0" layoutY="508.0" text="C2" />
+      <Label layoutX="613.0" layoutY="470.0" text="C2" />
+
+    </children>
+</AnchorPane>
