@@ -10,13 +10,13 @@ public class Solver {
     private static final int ProbabilityBetasColumnsCount = 3; // Count of probability betas columns
 
     // Source data
-    private double mCostOfOperation;
-    private double mFare;
-    private double mFine;
-    private int mEmptyBuses;
-    private int mLackOfBuses;
+    private double mCostOfOperation; //c1
+    private double mFare;//c2
+    private double mFine;//c3
+    private int mEmptyBuses; //n1
+    private int mLackOfBuses; //n2
     private double mAlpha;
-
+    private int mOptimalCountOfPassengers;
     private double[][] mMatrixOfProfits; // Matrix of profits
 
     private double[] mSubjectiveProbabilities;
@@ -59,9 +59,9 @@ public class Solver {
         return mBusses;
     }
 
-    public int[] getCountOfPassengers() {
+    public double[] getCountOfPassengers() {
         // Left header
-        int[] mPassengers = new int[COUNT];
+        double[] mPassengers = new double[COUNT];
         for (var i = 0; i < COUNT; i++) {
             mPassengers[i] = N + i;
         }
@@ -86,7 +86,7 @@ public class Solver {
 
                 } else if (countOfPassengers > countOfBuses) {
 
-                    var extraPassengers = countOfPassengers - countOfBuses;
+                    var extraPassengers = countOfPassengers - countOfBuses +1 ;
                     // We don't need to pay a fare for extra passengers (> n2 => fine for each bus)
                     mMatrixOfProfits[i][j] = extraPassengers > mLackOfBuses
                             ? (mFare - mCostOfOperation) * countOfBuses - (extraPassengers - mLackOfBuses) * mFine
@@ -94,7 +94,7 @@ public class Solver {
 
                 } else {
 
-                    var extraBusesCount = countOfBuses - countOfPassengers;
+                    var extraBusesCount = countOfBuses - countOfPassengers + 1;
                     // We don't need to pay for extra buses (n1 => fare for each bus)
                     if (extraBusesCount > mEmptyBuses) {
                         // We don't pay for transferred buses and they bring us profit
@@ -112,24 +112,28 @@ public class Solver {
         return mMatrixOfProfits;
     }
 
-    public double getMiniMaxCriterion() {
+    double getMiniMaxCriterion() {
         var fMiniMax = new double[COUNT];
         for (var i = 0; i < COUNT; i++) {
             fMiniMax[i] = Arrays.stream(mMatrixOfProfits[i]).min().getAsDouble();
         }
-        return Arrays.stream(fMiniMax).max().getAsDouble();
+        double res = Arrays.stream(fMiniMax).max().getAsDouble();
+        setCountOfPassengers( fMiniMax, res);
+        return res;
     }
 
-    public double getLaplaceCriterion() {
+    double getLaplaceCriterion() {
         var fLaplas = new double[COUNT];
 
         for (var i = 0; i < COUNT; i++) {
             fLaplas[i] = Arrays.stream(mMatrixOfProfits[i]).average().getAsDouble();
         }
-        return Arrays.stream(fLaplas).max().getAsDouble();
+        double res = Arrays.stream(fLaplas).max().getAsDouble();
+        setCountOfPassengers(fLaplas, res);
+        return res;
     }
 
-    public double getSavageCriterion() {
+    double getSavageCriterion() {
         // Find max alternative for each column
         var maxAlternatives = new double[COUNT];
 
@@ -157,10 +161,12 @@ public class Solver {
         for (var i = 0; i < COUNT; i++)
             fMax[i] = Arrays.stream(regretMatrix[i]).max().getAsDouble();
 
-        return Arrays.stream(fMax).min().getAsDouble();
+        double res = Arrays.stream(fMax).min().getAsDouble();
+        setCountOfPassengers(fMax, res);
+        return res;
     }
 
-    public double getHurwitzCriterion() {
+    double getHurwitzCriterion() {
         var maxsProbability = new double[COUNT];
         var minsProbability = new double[COUNT];
         var resultProbability = new double[COUNT];
@@ -170,15 +176,16 @@ public class Solver {
             minsProbability[i] = Arrays.stream(mMatrixOfProfits[i]).min().getAsDouble() * (1.00 - mAlpha);
             resultProbability[i] = maxsProbability[i] + minsProbability[i];
         }
-
-        return Arrays.stream(resultProbability).max().getAsDouble();
+        double res = Arrays.stream(resultProbability).max().getAsDouble();
+        setCountOfPassengers(resultProbability,res);
+        return res;
     }
 
     boolean containsNegative() {
         return Arrays.stream(mMatrixOfProfits).anyMatch(row -> Arrays.stream(row).anyMatch(cell -> cell <0));
     }
 
-    public double[][] getChangedWithNegativeMatrixOfProfits() {
+    double[][] getChangedWithNegativeMatrixOfProfits() {
         var maxNegative = Arrays.stream(mMatrixOfProfits)
                 .map(x -> Arrays.stream(x).min().getAsDouble())
                 .min(Comparator.comparingDouble(x -> x)).get();// Find the lowest negative element
@@ -198,16 +205,18 @@ public class Solver {
         return changedMatrixOfProfits;
     }
 
-    public double getMultiplicationCriterion(double[][] matrixOfProfits) {
+    double getMultiplicationCriterion(double[][] matrixOfProfits) {
         var multiplications = new double[COUNT];
         for (var i = 0; i < COUNT; i++) {
             multiplications[i] = Arrays.stream(matrixOfProfits[i]).reduce(1, (a, b) -> a * b);
         }
 
-        return Arrays.stream(multiplications).max().getAsDouble();
+        double res = Arrays.stream(multiplications).max().getAsDouble();
+        setCountOfPassengers(multiplications,res);
+        return res;
     }
 
-    public double getBayesLaplaceCriterion() {
+    double getBayesLaplaceCriterion() {
         var resultProbability = new double[COUNT];
         for (var i = 0; i < COUNT; i++) {
             var multiplication = 0.00;
@@ -221,10 +230,12 @@ public class Solver {
             resultProbability[i] = multiplication;
         }
 
-        return Arrays.stream(resultProbability).max().getAsDouble();
+        double res = Arrays.stream(resultProbability).max().getAsDouble();
+        setCountOfPassengers(resultProbability, res);
+        return res;
     }
 
-    public double getHodgeLehmannCriterion() {
+    double getHodgeLehmannCriterion() {
         var firstProbabilities = new double[COUNT];
         var secondProbabilities = new double[COUNT];
         var resultProbabilities = new double[COUNT];
@@ -243,10 +254,12 @@ public class Solver {
             resultProbabilities[i] = firstProbabilities[i] + secondProbabilities[i];
         }
 
-        return Arrays.stream(resultProbabilities).max().getAsDouble();
+        double res = Arrays.stream(resultProbabilities).max().getAsDouble();
+        setCountOfPassengers(resultProbabilities, res);
+        return res;
     }
 
-    public double getHermeierCriterion() {
+    double getHermeierCriterion() {
         var maxOrMinValues = new double[COUNT];
         var result = 0.00;
         if (containsNegative()) {
@@ -286,11 +299,11 @@ public class Solver {
             // Result is max of min values
             result = Arrays.stream(maxOrMinValues).max().getAsDouble();
         }
-
+        setCountOfPassengers(maxOrMinValues , result);
         return result;
     }
 
-    public double getMostProbableResultCriterion() {
+    double getMostProbableResultCriterion() {
         var resultProbabilities = new double[COUNT];
 
         for (var i = 0; i < COUNT; i++) {
@@ -301,8 +314,19 @@ public class Solver {
             }
             resultProbabilities[i] = multiplication;
         }
-
-        return Arrays.stream(resultProbabilities).max().getAsDouble();
+        double res = Arrays.stream(resultProbabilities).max().getAsDouble();
+        setCountOfPassengers(resultProbabilities, res);
+        return res;
     }
 
+    private void setCountOfPassengers(double[] array, double value) {
+        mOptimalCountOfPassengers = -1;
+        for (int i = 0; i < array.length; i++)
+            if (array[i] == value)
+                mOptimalCountOfPassengers = i;
+    }
+
+    int getOptimalCountOfPassengers() {
+        return mOptimalCountOfPassengers + N;
+    }
 }

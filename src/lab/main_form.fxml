@@ -18,7 +18,7 @@
       <Label layoutX="139.0" layoutY="18.0" text="C2" />
       <Label layoutX="247.0" layoutY="18.0" text="C3" />
       <Label layoutX="342.0" layoutY="18.0" text="n1" />
-      <Label layoutX="444.0" layoutY="18.0" prefHeight="17.0" prefWidth="23.0" text="n1" />
+      <Label layoutX="444.0" layoutY="18.0" prefHeight="17.0" prefWidth="23.0" text="n2" />
       <Label layoutX="545.0" layoutY="18.0" text="alpha" />
       <ScrollPane fx:id="scrollPane" layoutX="18.0" layoutY="85.0" prefHeight="369.0" prefWidth="810.0">
          <content>
@@ -30,15 +30,15 @@
              </TableView>
          </content>
       </ScrollPane>
-      <Label layoutX="42.0" layoutY="473.0" text="C1" />
-      <Label layoutX="42.0" layoutY="511.0" text="C1" />
-      <Label layoutX="42.0" layoutY="546.0" text="C1" />
-      <Label layoutX="328.0" layoutY="468.0" text="C2" />
-      <Label layoutX="328.0" layoutY="506.0" text="C2" />
-      <Label layoutX="328.0" layoutY="541.0" text="C2" />
-      <Label layoutX="613.0" layoutY="543.0" text="C2" />
-      <Label layoutX="613.0" layoutY="508.0" text="C2" />
-      <Label layoutX="613.0" layoutY="470.0" text="C2" />
+      <Label fx:id="lbl_MiniMaxCriterion" layoutX="42.0" layoutY="473.0" text="MiniMaxCriterion" />
+      <Label fx:id="lbl_LaplaceCriterion" layoutX="42.0" layoutY="511.0" text="LaplaceCriterion" />
+      <Label fx:id="lbl_SavageCriterion" layoutX="42.0" layoutY="546.0" text="SavageCriterion" />
+      <Label fx:id="lbl_HurwitzCriterion" layoutX="328.0" layoutY="468.0" text="HurwitzCriterion" />
+      <Label fx:id="lbl_MultiplicationCriterion" layoutX="328.0" layoutY="506.0" text="MultiplicationCriterion" />
+      <Label fx:id="lbl_BayesLaplaceCriterion" layoutX="328.0" layoutY="541.0" text="BayesLaplaceCriterion" />
+      <Label fx:id="lbl_HodgeLehmannCriterion" layoutX="613.0" layoutY="543.0" text="HodgeLehmannCriterion" />
+      <Label fx:id="lbl_HermeierCriterion" layoutX="613.0" layoutY="508.0" text="HermeierCriterion" />
+      <Label fx:id="lbl_MostProbableResultCriterion" layoutX="613.0" layoutY="470.0" text="MostProbableResultCriterion" />
 
     </children>
 </AnchorPane>
